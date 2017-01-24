@@ -704,7 +704,7 @@ public:
 	virtual unsigned calldataEncodedSize(bool _padded) const override;
 	u256 memorySize() const;
 	virtual u256 storageSize() const override;
-	virtual bool canLiveOutsideStorage() const override { return true; }
+	virtual bool canLiveOutsideStorage() const override;
 	virtual std::string toString(bool _short) const override;
 
 	virtual MemberList::MemberMap nativeMembers(ContractDefinition const* _currentScope) const override;

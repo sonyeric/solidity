@@ -1638,6 +1638,14 @@ u256 StructType::storageSize() const
 	return max<u256>(1, members(nullptr).storageSize());
 }
 
+bool StructType::canLiveOutsideStorage() const
+{
+	for (auto const& member: members(nullptr))
+		if (!member.type->canLiveOutsideStorage())
+			return false;
+	return true;
+}
+
 string StructType::toString(bool _short) const
 {
 	string ret = "struct " + m_struct.annotation().canonicalName;
@@ -1668,6 +1676,8 @@ TypePointer StructType::interfaceType(bool _inLibrary) const
 {
 	if (_inLibrary && location() == DataLocation::Storage)
 		return shared_from_this();
+	else if (canLiveOutsideStorage())
+		return copyForLocation(DataLocation::Memory, true);
 	else
 		return TypePointer();
 }
