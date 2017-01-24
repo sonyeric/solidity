@@ -4983,6 +4983,31 @@ BOOST_AUTO_TEST_CASE(constructible_internal_constructor)
 	success(text);
 }
 
+BOOST_AUTO_TEST_CASE(return_structs)
+{
+	char const* text = R"(
+		contract C {
+			struct S { uint a; T[] sub; }
+			struct T { uint[] x; }
+			function f() returns (uint x, S s) {
+			}
+		}
+	)";
+	success(text);
+}
+
+BOOST_AUTO_TEST_CASE(return_recursive_structs)
+{
+	char const* text = R"(
+		contract C {
+			struct S { uint a; S[] sub; }
+			function f() returns (uint x, S s) {
+			}
+		}
+	)";
+	CHECK_ERROR(text, TypeError, "Contract return recursive data types in external functions.");
+}
+
 BOOST_AUTO_TEST_CASE(address_checksum_type_deduction)
 {
 	char const* text = R"(

@@ -752,6 +752,35 @@ BOOST_AUTO_TEST_CASE(function_type)
 	checkInterface(sourceCode, interface);
 }
 
+BOOST_AUTO_TEST_CASE(return_structs)
+{
+	char const* text = R"(
+		contract C {
+			struct S { uint a; T[] sub; }
+			struct T { uint[2] x; }
+			function f() returns (uint x, S s) {
+			}
+		}
+	)";
+	char const* interface = R"(
+	[
+	{
+		"constant" : false,
+		"payable": false,
+		"inputs": [{
+			"name": "x",
+			"type": "function"
+		}],
+		"name": "g",
+		"outputs": [],
+		"type" : "function"
+	}
+	]
+	)";
+	checkInterface(text, interface);
+}
+
+
 BOOST_AUTO_TEST_CASE(metadata_stamp)
 {
 	// Check that the metadata stamp is at the end of the runtime bytecode.
