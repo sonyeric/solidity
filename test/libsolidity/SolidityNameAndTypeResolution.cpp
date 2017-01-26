@@ -5005,7 +5005,7 @@ BOOST_AUTO_TEST_CASE(return_recursive_structs)
 			}
 		}
 	)";
-	CHECK_ERROR(text, TypeError, "Contract return recursive data types in external functions.");
+	CHECK_ERROR(text, TypeError, "recursive data types in external functions.");
 }
 
 BOOST_AUTO_TEST_CASE(address_checksum_type_deduction)

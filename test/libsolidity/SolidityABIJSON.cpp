@@ -767,12 +767,25 @@ BOOST_AUTO_TEST_CASE(return_structs)
 	{
 		"constant" : false,
 		"payable": false,
-		"inputs": [{
+		"inputs": [],
+		"name": "f",
+		"outputs": [{
 			"name": "x",
-			"type": "function"
+			"type": "uint256"
+		}, {
+			"name": "s",
+			"type": [{
+				"name": "a",
+				"type": "uint256",
+			}, {
+				"name": "sub",
+				"type": "[]",
+				"subtype": [{
+					"name": "x",
+					"type": "uint256[2]"
+				}]
+			}]
 		}],
-		"name": "g",
-		"outputs": [],
 		"type" : "function"
 	}
 	]
