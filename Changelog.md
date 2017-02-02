@@ -4,6 +4,7 @@ Features:
  * Add ``assert(condition)``, which throws if condition is false.
  * Code generator: Support ``revert()`` to abort with rolling back, but not consuming all gas.
  * Inline assembly: Support ``revert`` (EIP140) as an opcode.
+ * Type checker: Warn when builtin symbols (e.g. ``keccak256``, ``msg``, etc.) are overridden.
  * Type system: Support explicit conversion of external function to address.
 
 Bugfixes:
