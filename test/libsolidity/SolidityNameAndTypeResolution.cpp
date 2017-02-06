@@ -5078,6 +5078,24 @@ BOOST_AUTO_TEST_CASE(invalid_address_length)
 	CHECK_WARNING(text, "checksum");
 }
 
+BOOST_AUTO_TEST_CASE(address_methods)
+{
+	char const* text = R"(
+		contract C {
+			function f() {
+				address addr;
+				uint balance = addr.balance;
+				bool callRet = addr.call();
+				bool callcodeRet = addr.callcode();
+				bool delegatecallRet = addr.delegatecall();
+				bool sendRet = addr.send(1);
+				addr.transfer(1);
+			}
+		}
+	)";
+	CHECK_SUCCESS(text);
+}
+
 BOOST_AUTO_TEST_SUITE_END()
 
 }
