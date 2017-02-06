@@ -1,6 +1,7 @@
 ### 0.4.10 (unreleased)
 
 Features:
+ * Inline assembly: Support bitwise shift operators.
  * Type system: Support explicit conversion of external function to address.
 
 Bugfixes:
