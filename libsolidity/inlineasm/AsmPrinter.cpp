@@ -96,7 +96,10 @@ string AsmPrinter::operator()(assembly::FunctionalInstruction const& _functional
 
 string AsmPrinter::operator()(assembly::Label const& _label)
 {
-	return _label.name + ":";
+	string out = _label.name;
+	if (!_label.stackInfo.empty())
+		out += "[" + boost::algorithm::join(_label.stackInfo, ", ") + "]";
+	return out + ":";
 }
 
 string AsmPrinter::operator()(assembly::Assignment const& _assignment)
@@ -112,6 +115,24 @@ string AsmPrinter::operator()(assembly::FunctionalAssignment const& _functionalA
 string AsmPrinter::operator()(assembly::VariableDeclaration const& _variableDeclaration)
 {
 	return "let " + _variableDeclaration.name + " := " + boost::apply_visitor(*this, *_variableDeclaration.value);
+}
+
+string AsmPrinter::operator()(assembly::FunctionDefinition const& _functionDefinition)
+{
+	string out = "function " + _functionDefinition.name + "(" + boost::algorithm::join(_functionDefinition.arguments, ", ") + ")";
+	if (!_functionDefinition.returns.empty())
+		out += " -> (" + boost::algorithm::join(_functionDefinition.returns, ", ") + ")";
+	return out + "\n" + (*this)(_functionDefinition.body);
+}
+
+string AsmPrinter::operator()(assembly::FunctionCall const& _functionCall)
+{
+	return
+		(*this)(_functionCall.functionName) + "(" +
+		boost::algorithm::join(
+			_functionCall.arguments | boost::adaptors::transformed(boost::apply_visitor(*this)),
+			", " ) +
+		")";
 }
 
 string AsmPrinter::operator()(Block const& _block)
