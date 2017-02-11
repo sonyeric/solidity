@@ -5079,6 +5079,104 @@ BOOST_AUTO_TEST_CASE(invalid_address_length)
 	CHECK_WARNING(text, "checksum");
 }
 
+BOOST_AUTO_TEST_CASE(interface)
+{
+	char const* text = R"(
+		interface I {
+		}
+	)";
+	success(text);
+}
+
+BOOST_AUTO_TEST_CASE(interface_constructor)
+{
+	char const* text = R"(
+		interface I {
+			function I();
+		}
+	)";
+	success(text);
+}
+
+BOOST_AUTO_TEST_CASE(interface_functions)
+{
+	char const* text = R"(
+		interface I {
+			function();
+			function f();
+		}
+	)";
+	success(text);
+}
+
+BOOST_AUTO_TEST_CASE(interface_events)
+{
+	char const* text = R"(
+		interface I {
+			event E();
+		}
+	)";
+	success(text);
+}
+
+BOOST_AUTO_TEST_CASE(interface_inheritance)
+{
+	char const* text = R"(
+		interface A {
+		}
+		interface I is A {
+		}
+	)";
+	CHECK_ERROR(text, TypeError, "Interfaces cannot inherit");
+}
+
+
+BOOST_AUTO_TEST_CASE(interface_structs)
+{
+	char const* text = R"(
+		interface I {
+			struct A {
+			}
+		}
+	)";
+	CHECK_ERROR(text, TypeError, "Structs cannot be defined in interfaces");
+}
+
+BOOST_AUTO_TEST_CASE(interface_function_bodies)
+{
+	char const* text = R"(
+		interface I {
+			function f() {
+			}
+		}
+	)";
+	CHECK_ERROR(text, TypeError, "Functions in interfaces cannot have an implementation");
+}
+
+BOOST_AUTO_TEST_CASE(interface_variables)
+{
+	char const* text = R"(
+		interface I {
+			uint a;
+		}
+	)";
+	CHECK_ERROR(text, TypeError, "Variables cannot be defined in interfaces");
+}
+
+BOOST_AUTO_TEST_CASE(using_interface)
+{
+	char const* text = R"(
+		interface I {
+			function f();
+		}
+		contract C is I {
+			function f() {
+			}
+		}
+	)";
+	success(text);
+}
+
 BOOST_AUTO_TEST_SUITE_END()
 
 }
