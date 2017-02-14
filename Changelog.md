@@ -10,6 +10,7 @@ Bugfixes:
  * Commandline interface: Always escape filenames (replace ``/``, ``:`` and ``.`` with ``_``).
  * Commandline interface: Do not try creating paths ``.`` and ``..``.
  * Type system: Disallow arrays with negative length.
+ * Type system: Support scientific notation in numbers (e.g. ``2e8`` and ``200e-2``).
 
 ### 0.4.9 (2017-01-31)
 
