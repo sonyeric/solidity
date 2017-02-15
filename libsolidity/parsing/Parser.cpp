@@ -194,15 +194,10 @@ ASTPointer<ImportDirective> Parser::parseImportDirective()
 	return nodeFactory.createNode<ImportDirective>(path, unitAlias, move(symbolAliases));
 }
 
-ASTPointer<ContractDefinition> Parser::parseContractDefinition(Token::Value _expectedKind)
+ContractDefinition::ContractKind Parser::tokenToContractKind(Token::Value _token)
 {
-	ASTNodeFactory nodeFactory(*this);
-	ASTPointer<ASTString> docString;
-	if (m_scanner->currentCommentLiteral() != "")
-		docString = make_shared<ASTString>(m_scanner->currentCommentLiteral());
-	expectToken(_expectedKind);
 	ContractDefinition::ContractKind contractKind;
-	switch(_expectedKind)
+	switch(_token)
 	{
 	case Token::Interface:
 		contractKind = ContractDefinition::ContractKind::Interface;
@@ -216,6 +211,15 @@ ASTPointer<ContractDefinition> Parser::parseContractDefinition(Token::Value _exp
 	default:
 		fatalParserError("Unsupported contract type.");
 	}
+}
+
+ASTPointer<ContractDefinition> Parser::parseContractDefinition(Token::Value _expectedKind)
+{
+	ASTNodeFactory nodeFactory(*this);
+	ASTPointer<ASTString> docString;
+	if (m_scanner->currentCommentLiteral() != "")
+		docString = make_shared<ASTString>(m_scanner->currentCommentLiteral());
+	expectToken(_expectedKind);
 	ASTPointer<ASTString> name = expectIdentifierToken();
 	vector<ASTPointer<InheritanceSpecifier>> baseContracts;
 	if (m_scanner->currentToken() == Token::Is)
@@ -268,7 +272,7 @@ ASTPointer<ContractDefinition> Parser::parseContractDefinition(Token::Value _exp
 		docString,
 		baseContracts,
 		subNodes,
-		contractKind
+		tokenToContractKind(_expectedKind)
 	);
 }
 
