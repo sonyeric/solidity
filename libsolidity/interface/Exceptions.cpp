@@ -56,3 +56,11 @@ Error::Error(Type _type): m_type(_type)
 		break;
 	}
 }
+
+Error::Error(Error::Type _type, const std::string& _description, const SourceLocation& _location):
+	Error(_type)
+{
+	if (!_location.isEmpty())
+		*this << errinfo_sourceLocation(_location);
+	*this << errinfo_comment(_description);
+}
